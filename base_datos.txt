@@ -1,0 +1,131 @@
+-- Tabla de categorías
+CREATE TABLE categorias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabla de dificultades
+CREATE TABLE dificultades (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nivel VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabla de destinos
+CREATE TABLE destinos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabla de actividades
+CREATE TABLE actividades (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabla principal de tours
+CREATE TABLE tours (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    enlace_slug VARCHAR(255) UNIQUE NOT NULL,
+    precio DECIMAL(10,2),
+    duracion_dias INT DEFAULT 0,
+    duracion_horas INT DEFAULT 0,
+    dificultad_id INT,
+    es_portada BOOLEAN DEFAULT FALSE,
+    orden_portada INT DEFAULT 0,
+    codigo_we_travel VARCHAR(255),
+    cantidad_imagenes INT DEFAULT 0,
+    categoria_id INT,
+    activo BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE SET NULL,
+    FOREIGN KEY (dificultad_id) REFERENCES dificultades(id) ON DELETE SET NULL,
+    
+    INDEX idx_enlace_slug (enlace_slug),
+    INDEX idx_categoria (categoria_id),
+    INDEX idx_dificultad (dificultad_id),
+    INDEX idx_portada (es_portada),
+    INDEX idx_activo (activo)
+);
+
+-- Tabla de contenidos multilingües
+CREATE TABLE tour_contenidos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tour_id INT NOT NULL,
+    idioma ENUM('es', 'en', 'pt', 'fr') DEFAULT 'es',
+    nombre VARCHAR(255),
+    mensaje TEXT,
+    mensaje_social TEXT,
+    introduccion TEXT,
+    descripcion TEXT,
+    incluye TEXT,
+    mas_informacion TEXT,
+    faq TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_tour_language (tour_id, idioma),
+    
+    INDEX idx_tour_id (tour_id),
+    INDEX idx_idioma (idioma)
+);
+
+-- Tabla de relación tours-destinos
+CREATE TABLE tour_destinos (
+    tour_id INT NOT NULL,
+    destino_id INT NOT NULL,
+    orden INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (tour_id, destino_id),
+    FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE,
+    FOREIGN KEY (destino_id) REFERENCES destinos(id) ON DELETE CASCADE,
+    
+    INDEX idx_destino_id (destino_id),
+    INDEX idx_orden (orden)
+);
+
+-- Tabla de relación tours-actividades
+CREATE TABLE tour_actividades (
+    tour_id INT NOT NULL,
+    actividad_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (tour_id, actividad_id),
+    FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE,
+    FOREIGN KEY (actividad_id) REFERENCES actividades(id) ON DELETE CASCADE,
+    
+    INDEX idx_actividad_id (actividad_id)
+);
+
+-- Tabla de detalles estructurados
+CREATE TABLE tour_detalles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tour_id INT NOT NULL,
+    tipo ENUM('incluye', 'no_incluye', 'que_llevar', 'recomendacion', 'importante') NOT NULL,
+    titulo VARCHAR(255),
+    descripcion TEXT,
+    orden INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE,
+    
+    INDEX idx_tour_id (tour_id),
+    INDEX idx_tipo (tipo),
+    INDEX idx_orden (orden)
+);
+
