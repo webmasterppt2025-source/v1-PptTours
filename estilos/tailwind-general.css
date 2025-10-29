@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos para la cabecera */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    background-image: url('../imagenes/fondos/fondo_cabecera.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Neutraface 2 Display', sans-serif;
+    color: #FFFFFF;
+}
+.correo_cabecera, .whatsapp_cabecera, .redes_cabecera {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.correo_cabecera {
+    justify-content: flex-start;
+    padding-left: 20px;
+}
+
+.whatsapp_cabecera {
+    justify-content: center;
+}
+
+.redes_cabecera {
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.redes_cabecera a {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.redes_cabecera a:hover {
+    transform: scale(1.1);
+}
+
+.redes_cabecera a:first-child {
+    margin-left: 0;
+}
+
+.correo_cabecera a, .whatsapp_cabecera {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+
+.correo_cabecera a:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+}
+
+/* Estilos para final_cabecera - AHORA DEBAJO DEL GRID */
+.final_cabecera {
+    width: 100%;
+    color: var(--color-primary);
+    overflow: hidden;
+
+    grid-column: 1 / -1; /* OCUPA TODAS LAS COLUMNAS */
+}
+
+.contenido-izquierda-7030 {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    align-items: center;
+}
+
+.contenido-izquierda-cabecera {
+    text-align: center;
+    background-color: #FFFFFF;
+    padding: 16px 0;
+}
+
+.contenido-derecha-cabecera {
+    padding: 16px;
+}
+
+/* Estilos para la sección de contacto */
+.contenido-derecha-7030 {
+    padding: 16px 0;
+    text-align: center;
+}
+
+.contenido-derecha-7030 p {
+    font-family: 'Neutraface 2 Display', sans-serif;
+    margin-bottom: 8px;
+    color: #FFFFFF;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+
+.boton-contacto {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: #FFFFFF;
+    color: var(--color-primary);
+    text-decoration: none;
+    border-radius: 6px;
+    font-family: 'Neutraface 2 Display', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 2px solid #FFFFFF;
+}
+
+.boton-contacto:hover {
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.contenido-derecha-cabecera img {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Css imagenes */
+.logo-sin-fondo, .marca-peru {
+    background-color: transparent;
+    mix-blend-mode: multiply;
+}
+
+/* Fuerza la eliminación de fondos blancos */
+.contenido-izquierda-cabecera img,
+.contenido-derecha-cabecera img {
+    background-color: transparent !important;
+}
+
+/* Alternativa para fondos blancos */
+.img-transparente {
+    filter: brightness(1.1) contrast(1.1);
+}
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .correo_cabecera, .whatsapp_cabecera, .redes_cabecera {
+        justify-content: center;
+        padding: 8px 0;
+    }
+    
+    .correo_cabecera {
+        padding-left: 0;
+    }
+    
+    .redes_cabecera {
+        padding-right: 0;
+    }
+
+    .contenido-izquierda-7030 {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .contenido-derecha-cabecera {
+        padding: 8px;
+    }
+    
+    .boton-contacto {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
