@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Definir el tema con @theme */
+@theme {
+  /* Colores basados en PANTONE 7738 */
+  --color-primary: rgb(144 183 88);    /* PANTONE 7738 UP */
+  --color-primary-dark: rgb(120 155 74);
+  --color-primary-light: rgb(168 201 120);
+  --color-black: rgb(93 75 63);        /* PANTONE BLACK 5 UP */
+  --color-black-light: rgb(115 95 82);
+  
+  /* Tipografía */
+  --font-family-display: "Neutraface 2 Display", system-ui, sans-serif;
+  --font-family-body: "Neutraface 2 Text", system-ui, sans-serif;
+  
+  /* Tamaños de fuente personalizados */
+  --font-size-hero: 4.5rem;      /* 72px */
+  --font-size-display: 3rem;     /* 48px */
+  --font-size-title: 2rem;       /* 32px */
+  --font-size-subtitle: 1.5rem;  /* 24px */
+  
+  /* Espaciado personalizado */
+  --spacing-section: 5rem;       /* 80px */
+  --spacing-container: 2.5rem;   /* 40px */
+  
+  /* Breakpoints personalizados */
+  --breakpoint-xs: 350px;
+}
