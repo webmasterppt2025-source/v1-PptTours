@@ -1,10 +1,29 @@
+<?php
+require_once 'consultas/menu_data.php';
+
+$datosMenu = obtenerDatosMenuCompleto();
+
+// DEBUG DIRECTO
+echo "<!-- DEBUG: datosMenu count = " . count($datosMenu) . " -->";
+
+if (empty($datosMenu)) {
+    echo "<!-- DEBUG: datosMenu está VACÍO -->";
+    
+    // Verifica si hay error en la conexión
+    require_once 'consultas/categorias.php';
+    $categoriasDirectas = obtenerCategorias();
+    echo "<!-- DEBUG: categoriasDirectas count = " . count($categoriasDirectas) . " -->";
+}
+?>
+
+
 <div class="max-w-7xl mx-auto px-4">
     <!-- Primera Fila: Logo y Nombre de la Empresa -->
     <div class="flex justify-between items-center py-4">
         <!-- Logo -->
-        <div class="flex-shrink-0 mx-auto">
-            <a href="../index.php" class="flex items-center space-x-3 rtl:space-x-reverse flex-shrink-0">
-                <img src="./imagenes/logo-sin-fondo.png" class="h-8 w-auto" alt="PERU PRIVATE TOURS Logo" />
+        <div class="shrink-0 mx-auto">
+            <a href="../index.php" class="flex items-center space-x-3 rtl:space-x-reverse shrink-0">
+                <img src="./imagenes/logo-sin-fondo.png" class="h-8 w-auto" alt="PERU PRIVATE TOURS Log o" />
                 <span class="self-left text-xl font-semibold whitespace-nowrap text-gray-900">PERU PRIVATE TOURS</span>
             </a>
         </div>
@@ -22,55 +41,65 @@
     <!-- Segunda Fila: Menú de Navegación -->
     <div class="border-t border-gray-200 pt-4">
         <!-- Menú de categorías - ESCRITORIO -->
-        <ul class="hidden md:flex space-x-8 justify-center">
+        <ul class="hidden md:flex space-x-8 justify-center relative"> 
             <li>
                 <a href="../index.php" class="text-gray-700 hover:text-blue-500 font-medium">Inicio</a>
             </li>
             
-            <?php if (!empty($categorias)): ?>
-                <?php foreach($categorias as $categoria): ?>
-                    <li class="relative group">
+            <?php if (!empty($datosMenu)): ?>
+                <?php foreach($datosMenu as $item): ?>
+                    <?php $categoria = $item['categoria']; ?>
+                    <?php $tours = $item['tours']; ?>
+                    <li class="group">
                         <a href="categoria.php?id=<?php echo $categoria['id']; ?>" 
-                           class="text-gray-700 hover:text-blue-500 font-medium flex items-center">
+                        class="text-gray-700 hover:text-blue-500 font-medium flex items-center relative z-10"> 
                             <?php echo htmlspecialchars($categoria['nombre']); ?>
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </a>
                         
-                        <!-- Dropdown según ID de categoría -->
-                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 py-2 w-48 z-50">
-                            <?php if($categoria['id'] == 1): ?>
-                                <!-- Dropdown para Categoría 1 -->
-                                <a href="tour-machupicchu.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Machu Picchu Clásico</a>
-                                <a href="tour-sacred-valley.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Valle Sagrado</a>
-                                <a href="tour-rainbow-mountain.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Montaña de Colores</a>
-                                
-                            <?php elseif($categoria['id'] == 2): ?>
-                                <!-- Dropdown para Categoría 2 -->
-                                <a href="tour-lima-moderna.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Lima Moderna</a>
-                                <a href="tour-lima-colonial.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Lima Colonial</a>
-                                <a href="tour-gastronomico.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Tour Gastronómico</a>
-                                
-                            <?php elseif($categoria['id'] == 3): ?>
-                                <!-- Dropdown para Categoría 3 -->
-                                <a href="tour-titicaca.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Lago Titicaca</a>
-                                <a href="tour-uros-islands.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Islas Flotantes Uros</a>
-                                <a href="tour-sillustani.php" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Chullpas de Sillustani</a>
-                                
-                            <?php else: ?>
-                                <!-- Dropdown genérico para otras categorías -->
-                                <a href="categoria.php?id=<?php echo $categoria['id']; ?>&tipo=aventura" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Tours de Aventura</a>
-                                <a href="categoria.php?id=<?php echo $categoria['id']; ?>&tipo=cultural" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Tours Culturales</a>
-                                <a href="categoria.php?id=<?php echo $categoria['id']; ?>&tipo=naturaleza" class="block px-4 py-2 text-gray-700 hover:bg-primary-light">Tours de Naturaleza</a>
-                            <?php endif; ?>
+                        <!-- Dropdown POSICIONADO DEBAJO DEL MENÚ -->
+                        <div class="absolute hidden group-hover:block bg-white shadow-xl rounded-lg py-4 w-screen z-50 border border-gray-100 left-1/2 transform -translate-x-1/2 top-full">
                             
-                            <!-- Enlace para ver todos los tours de la categoría -->
-                            <div class="border-t border-gray-100 mt-1 pt-1">
-                                <a href="categoria.php?id=<?php echo $categoria['id']; ?>" 
-                                   class="block px-4 py-2 text-primary-dark hover:bg-primary-light font-medium">
-                                    Ver Todos
-                                </a>
+                            <div class="max-w-7xl mx-auto px-6">
+                                <?php if (!empty($tours)): ?>
+                                    <!-- Dropdown DINÁMICO con tours desde la base de datos -->
+                                    <div class="grid grid-cols-3 gap-6">
+                                        <?php foreach($tours as $tour): ?>
+                                            <a href="tour.php?slug=<?php echo $tour['enlace_slug']; ?>" 
+                                            class="flex py-4 px-4 hover:bg-primary-light rounded-lg transition-colors">
+                                                <div class="overflow-hidden flex-1">
+                                                    <p class="text-sm font-medium text-gray-900">
+                                                        <?php echo htmlspecialchars($tour['nombre']); ?>
+                                                    </p>
+                                                    <p class="text-xs text-gray-500 mt-1">
+                                                        <?php echo htmlspecialchars($tour['descripcion_corta'] ?? 'Tour exclusivo'); ?>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php else: ?>
+                                    <!-- Mensaje si no hay tours -->
+                                    <div class="text-center py-8">
+                                        <p class="text-gray-500">Próximamente nuevos tours</p>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <!-- Enlace para ver todos los tours de la categoría -->
+                                <div class="border-t border-gray-100 mt-6 pt-4 text-center">
+                                    <a href="categoria.php?id=<?php echo $categoria['id']; ?>" 
+                                    class="inline-flex items-center justify-between group px-6 py-2 bg-primary-light hover:bg-primary rounded-lg transition-colors">
+                                        <span class="text-sm font-medium text-primary-dark group-hover:text-white transition-colors">
+                                            Ver Todos los Tours de <?php echo htmlspecialchars($categoria['nombre']); ?>
+                                        </span>
+                                        <svg class="w-4 h-4 text-primary-dark group-hover:text-white group-hover:translate-x-1 transition-all ml-2" 
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </li>

@@ -13,8 +13,7 @@
     
 <body>
     <header class="text-black ">
-        <?php include("consultas/menu.php");?>
-
+        <?php include("consultas/menu_data.php");?>
         <?php include("recursos/cabecera.php");?>
 
         <?php include ('assets/sprite.svg'); ?>
